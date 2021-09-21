@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 function Presupost() {
   const [stateInput1, setStateInput1] = useState(false);
   const [stateInput2, setStateInput2] = useState(false);
   const [stateInput3, setStateInput3] = useState(false);
+  const [pages, setPages] = useState(0);
+  const [idioms, setIdioms] = useState(0);
+
   const [amount, setAmount] = useState(0);
 
   // FOR INPUT 1
@@ -41,6 +44,31 @@ function Presupost() {
     setStateInput3(!stateInput3);
   };
 
+  let setPagesHandler = (number) => {
+    // If the new number is lower than the number of pages actual
+    if (number < pages) {
+      // We will need to substract the difference
+      let difference = number - pages;
+      setPages(difference);
+    } else {
+      setPages(number);
+    }
+  };
+
+  let setIdiomsHandler = (number) => {
+    // Same as before, if the new number is lower than the idioms that already have, we will need to substract the difference
+    if (number < idioms) {
+      let difference = number - idioms;
+      setIdioms(difference);
+    } else {
+      setIdioms(number);
+    }
+  };
+
+  useEffect(() => {
+    AmountChanger(pages * idioms * 30);
+  }, [pages, idioms]);
+
   let AmountChanger = (number) => {
     setAmount(amount + number);
   };
@@ -59,6 +87,31 @@ function Presupost() {
             Una pàgina web $500
           </label>
         </Element>
+        {stateInput1 ? (
+          <DashboardPages>
+            <ElementPages>
+              <label>
+                Número de pàgines
+                <input
+                  type="number"
+                  onChange={(event) => setPagesHandler(event.target.value)}
+                />
+              </label>
+            </ElementPages>
+            <ElementPages>
+              <label>
+                Número de idiomes
+                <input
+                  type="number"
+                  checked={stateInput2}
+                  onChange={(event) => setIdiomsHandler(event.target.value)}
+                />
+              </label>
+            </ElementPages>
+          </DashboardPages>
+        ) : (
+          ""
+        )}
         <Element inputvalue="500">
           <label>
             <input
@@ -112,3 +165,19 @@ const Element = styled.div`
 `;
 
 const Quantity = styled.p``;
+
+const DashboardPages = styled.div`
+  height: 10vh;
+  width: 20vw;
+  border: 0.5px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ElementPages = styled.div`
+  display: flex;
+  flex-direction: row;
+`;

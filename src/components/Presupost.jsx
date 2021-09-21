@@ -6,16 +6,16 @@ function Presupost() {
   const [amount, setAmount] = useState(0);
 
   let input1Handler = () => {
-    setStateInput1(!stateInput1);
-
-    if (stateInput1 == false) {
+    if (stateInput1 === true) {
       AmountChanger(500);
+      console.log(amount);
     }
+
+    setStateInput1(!stateInput1);
   };
 
   let AmountChanger = (number) => {
     setAmount(amount + number);
-    console.log(amount);
   };
 
   return (

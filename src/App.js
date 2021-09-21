@@ -1,9 +1,8 @@
 import "./App.css";
+import Presupost from "./components/Presupost.jsx";
 
 function App() {
-  return (
-    
-  );
+  return <Presupost />;
 }
 
 export default App;

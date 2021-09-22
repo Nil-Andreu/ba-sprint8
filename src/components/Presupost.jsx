@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import plus from "../assets/plus.png";
+import minus from "../assets/minus.png";
 
 function Presupost() {
   const [stateInput1, setStateInput1] = useState(false);
@@ -7,6 +9,7 @@ function Presupost() {
   const [stateInput3, setStateInput3] = useState(false);
   const [pages, setPages] = useState(0);
   const [idioms, setIdioms] = useState(0);
+  const [input1, setInput1] = useState(0);
 
   const [amount, setAmount] = useState(0);
 
@@ -65,6 +68,22 @@ function Presupost() {
     }
   };
 
+  let incrementInput1 = () => {
+    setPages(pages + 1);
+  };
+
+  let decrementInput1 = () => {
+    setPages(pages - 1);
+  };
+
+  let incrementInput2 = () => {
+    setIdioms(idioms + 1);
+  };
+
+  let decrementInput2 = () => {
+    setIdioms(idioms - 1);
+  };
+
   useEffect(() => {
     AmountChanger(pages * idioms * 30);
   }, [pages, idioms]);
@@ -92,20 +111,26 @@ function Presupost() {
             <ElementPages>
               <label>
                 Número de pàgines
-                <input
-                  type="number"
+                <Button1 onClick={incrementInput1} />
+                <Input
+                  type="text"
+                  value={pages}
                   onChange={(event) => setPagesHandler(event.target.value)}
                 />
+                <Button2 onClick={decrementInput1} />
               </label>
             </ElementPages>
             <ElementPages>
               <label>
                 Número de idiomes
-                <input
+                <Button1 onClick={incrementInput2} />
+                <Input
                   type="number"
+                  value={idioms}
                   checked={stateInput2}
                   onChange={(event) => setIdiomsHandler(event.target.value)}
                 />
+                <Button2 onClick={decrementInput2} />
               </label>
             </ElementPages>
           </DashboardPages>
@@ -159,13 +184,6 @@ const Dashboard = styled.div`
   justify-content: center;
 `;
 
-const Element = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const Quantity = styled.p``;
-
 const DashboardPages = styled.div`
   height: 10vh;
   width: 20vw;
@@ -180,4 +198,37 @@ const DashboardPages = styled.div`
 const ElementPages = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
+
+const Element = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+// The button for applying the minus
+const Button1 = styled.button`
+  height: 20px;
+  width: 20px;
+  background-image: url(${plus});
+  background-color: transparent;
+  background-size: contain;
+  border-radius: 4px;
+`;
+
+// Button for applying the plus
+const Button2 = styled.button`
+  height: 20px;
+  width: 20px;
+  border-radius: 4px;
+  background-image: url(${minus});
+  background-color: transparent;
+  background-size: contain;
+`;
+
+const Input = styled.input`
+  width: 30%;
+`;
+
+const Quantity = styled.p``;

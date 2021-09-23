@@ -24,6 +24,10 @@ function Presupost() {
       checkAmountHandler(500)
     } else {
       checkAmountHandler(-500)
+
+      // And also when turning off, reset the value of pages and languages
+      setPages(0)
+      setLanguages(0)
     }
 
     setInput1CheckAmount(!input1CheckAmount)
@@ -70,7 +74,7 @@ function Presupost() {
     setPersonalizedAmount(new_amount)
   }, [pages, languages])
 
-  // For the general amount
+  // For the general amount, we will summ both before
   useEffect(() => {
     setBigAmount(checkAmount+personalizedAmount)
   }, [checkAmount, personalizedAmount])

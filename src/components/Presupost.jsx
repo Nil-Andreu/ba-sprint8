@@ -4,93 +4,76 @@ import plus from "../assets/plus.png";
 import minus from "../assets/minus.png";
 
 function Presupost() {
-  const [stateInput1, setStateInput1] = useState(false);
-  const [stateInput2, setStateInput2] = useState(false);
-  const [stateInput3, setStateInput3] = useState(false);
-  const [pages, setPages] = useState(0);
-  const [idioms, setIdioms] = useState(0);
-  const [input1, setInput1] = useState(0);
+  // For handling all the amounts
+  const [bigAmount, setBigAmount] = useState(0)
+  const [checkAmount, setCheckAmount] = useState(0)
+  const [personalizedAmount, setPersonalizedAmount] = useState(0)
 
-  const [amount, setAmount] = useState(0);
+  // For handling the state of the inputs for checkAmounts
+  const [input1CheckAmount, setInput1CheckAmount] = useState(false)
+  const [input2CheckAmount, setInput2CheckAmount] = useState(false)
+  const [input3CheckAmount, setInput3CheckAmount] = useState(false)
 
-  // FOR INPUT 1
-  let input1Handler = () => {
-    // If it is false, means that will be true when clicked
-    if (stateInput1 === false) {
-      AmountChanger(500);
+  // For handling the pages and languages values
+  const [pages, setPages] = useState(0)
+  const [languages, setLanguages] = useState(0)
+
+  // HANDLING THE CHECK INPUTS
+  let input1HandlerCheckAmount = () => {
+    if (input1CheckAmount === false) {
+      checkAmountHandler(500)
     } else {
-      AmountChanger(-500);
+      checkAmountHandler(-500)
     }
 
-    // And now we change the state
-    setStateInput1(!stateInput1);
-  };
+    setInput1CheckAmount(!input1CheckAmount)
+  }
 
-  // FOR INPUT 2
-  let input2Handler = () => {
-    // If it is false, means that will be true when clicked
-    if (stateInput2 === false) {
-      AmountChanger(300);
+  let input2HandlerCheckAmount = () => {
+    if (input2CheckAmount === false) {
+      checkAmountHandler(300)
     } else {
-      AmountChanger(-300);
+      checkAmountHandler(-300)
     }
-    // And now we change the state
-    setStateInput2(!stateInput2);
-  };
 
-  let input3Handler = () => {
-    if (stateInput3 === false) {
-      AmountChanger(200);
+    setInput2CheckAmount(!input2CheckAmount)
+  }
+
+  let input3HandlerCheckAmount = () => {
+    if (input3CheckAmount === false) {
+      checkAmountHandler(200)
     } else {
-      AmountChanger(-200);
+      checkAmountHandler(-200)
     }
-    setStateInput3(!stateInput3);
-  };
 
+    setInput3CheckAmount(!input3CheckAmount)
+  }
+
+  // MANAGING THE PERSONALIZED INPUTS
   let setPagesHandler = (number) => {
-    // If the new number is lower than the number of pages actual
-    if (number < pages) {
-      // We will need to substract the difference
-      let difference = number - pages;
-      setPages(difference);
-    } else {
-      setPages(number);
-    }
-  };
+    setPages(pages+number)
+  }
 
-  let setIdiomsHandler = (number) => {
-    // Same as before, if the new number is lower than the idioms that already have, we will need to substract the difference
-    if (number < idioms) {
-      let difference = number - idioms;
-      setIdioms(difference);
-    } else {
-      setIdioms(number);
-    }
-  };
+  let setLanguagesHandler = (number) => {
+    setLanguages(languages+number)
+  }
 
-  let incrementInput1 = () => {
-    setPages(pages + 1);
-  };
+  // HANDLING CHANGES IN THE AMOUNT
+  // For the amount in of checked
+  let checkAmountHandler = (number) => {
+    setCheckAmount(checkAmount + number)
+  }
 
-  let decrementInput1 = () => {
-    setPages(pages - 1);
-  };
-
-  let incrementInput2 = () => {
-    setIdioms(idioms + 1);
-  };
-
-  let decrementInput2 = () => {
-    setIdioms(idioms - 1);
-  };
-
+  // For the amount of personalized
   useEffect(() => {
-    AmountChanger(pages * idioms * 30);
-  }, [pages, idioms]);
+    let new_amount = pages * languages * 30
+    setPersonalizedAmount(new_amount)
+  }, [pages, languages])
 
-  let AmountChanger = (number) => {
-    setAmount(amount + number);
-  };
+  // For the general amount
+  useEffect(() => {
+    setBigAmount(checkAmount+personalizedAmount)
+  }, [checkAmount, personalizedAmount])
 
   return (
     <Container>
@@ -100,37 +83,44 @@ function Presupost() {
           <label>
             <input
               type="checkbox"
-              checked={stateInput1}
-              onClick={input1Handler}
+              checked={input1CheckAmount}
+              onClick={input1HandlerCheckAmount}
             />
             Una pàgina web $500
           </label>
         </Element>
-        {stateInput1 ? (
+        {input1CheckAmount ? (
           <DashboardPages>
             <ElementPages>
               <label>
                 Número de pàgines
-                <Button1 onClick={incrementInput1} />
+                <Button1 onClick={() => {
+                  setPagesHandler(1)
+                }} />
                 <Input
                   type="text"
                   value={pages}
                   onChange={(event) => setPagesHandler(event.target.value)}
                 />
-                <Button2 onClick={decrementInput1} />
+                <Button2 onClick={() => {
+                  setPagesHandler(-1)
+                }} />
               </label>
             </ElementPages>
             <ElementPages>
               <label>
                 Número de idiomes
-                <Button1 onClick={incrementInput2} />
+                <Button1 onClick={() => {
+                  setLanguagesHandler(1)
+                }} />
                 <Input
-                  type="number"
-                  value={idioms}
-                  checked={stateInput2}
-                  onChange={(event) => setIdiomsHandler(event.target.value)}
+                  type="text"
+                  value={languages}
+                  onChange={(event) => setLanguagesHandler(event.target.value)}
                 />
-                <Button2 onClick={decrementInput2} />
+                <Button2 onClick={() => {
+                  setLanguagesHandler(-1)
+                }} />
               </label>
             </ElementPages>
           </DashboardPages>
@@ -141,8 +131,8 @@ function Presupost() {
           <label>
             <input
               type="checkbox"
-              checked={stateInput2}
-              onClick={input2Handler}
+              checked={input2CheckAmount}
+              onClick={input2HandlerCheckAmount}
             />
             Consultoria en SEO $300
           </label>
@@ -151,13 +141,13 @@ function Presupost() {
           <label>
             <input
               type="checkbox"
-              checked={stateInput3}
-              onClick={input3Handler}
+              checked={input3CheckAmount}
+              onClick={input3HandlerCheckAmount}
             />
             Consultoria en SEO $200
           </label>
         </Element>
-        <Quantity>{amount} $</Quantity>
+        <Quantity>{bigAmount} $</Quantity>
       </Dashboard>
     </Container>
   );

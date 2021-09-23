@@ -55,11 +55,22 @@ function Presupost() {
 
   // MANAGING THE PERSONALIZED INPUTS
   let setPagesHandler = (number) => {
-    setPages(pages+number)
+    // We will pass as a Number the number received, if we do not do that if the user puts 1, it will give you pages+"1"
+    // The number that is put, is going to be the number of the pages
+    setPages(Number(number))
+  }
+
+  // This is going to be for handling the incrementing or decrementing
+  let differentialPages = (number) => {
+    setPages(Number(pages)+number)
   }
 
   let setLanguagesHandler = (number) => {
-    setLanguages(languages+number)
+    setLanguages(Number(number))
+  }
+
+  let differentialLanguages = (number) => {
+    setLanguages(Number(languages)+number)
   }
 
   // HANDLING CHANGES IN THE AMOUNT
@@ -99,7 +110,7 @@ function Presupost() {
               <label>
                 Número de pàgines
                 <Button1 onClick={() => {
-                  setPagesHandler(1)
+                  differentialPages(1)
                 }} />
                 <Input
                   type="text"
@@ -107,7 +118,7 @@ function Presupost() {
                   onChange={(event) => setPagesHandler(event.target.value)}
                 />
                 <Button2 onClick={() => {
-                  setPagesHandler(-1)
+                  differentialPages(-1)
                 }} />
               </label>
             </ElementPages>
@@ -115,7 +126,7 @@ function Presupost() {
               <label>
                 Número de idiomes
                 <Button1 onClick={() => {
-                  setLanguagesHandler(1)
+                  differentialLanguages(1)
                 }} />
                 <Input
                   type="text"
@@ -123,7 +134,7 @@ function Presupost() {
                   onChange={(event) => setLanguagesHandler(event.target.value)}
                 />
                 <Button2 onClick={() => {
-                  setLanguagesHandler(-1)
+                  differentialLanguages(-1)
                 }} />
               </label>
             </ElementPages>

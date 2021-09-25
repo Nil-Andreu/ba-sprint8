@@ -12,6 +12,11 @@ function Presupost() {
   let initialPages = 0
   let initialLanguages = 0
 
+  // For handling the changes in checkamount
+  let input1Checking = false
+  let input2Checking = false
+  let input3Checking = false
+
   // For handling all the amounts
   const [bigAmount, setBigAmount] = useState(0);
   const [checkAmount, setCheckAmount] = useState(0);
@@ -62,42 +67,40 @@ function Presupost() {
 
   // HANDLING THE CHECK INPUTS
   let input1HandlerCheckAmount = () => {
-    if (input1CheckAmount === false) {
-      checkAmountHandler(500);
-    } else {
-      checkAmountHandler(-500);
+    if (input1CheckAmount === true) { // Meaning that the button was active, and then it was clicked
 
       // And also when turning off, reset the value of pages and languages
       setPages(0);
+      window.localStorage.setItem("pages", 0);
+
       setLanguages(0);
+      window.localStorage.setItem("languages", 0);
+
     }
     window.localStorage.setItem("input1CheckAmount", !input1CheckAmount);
+
+    checkAmountHandler(!input1CheckAmount, input2CheckAmount, input3CheckAmount)
 
     setInput1CheckAmount(!input1CheckAmount);
   };
 
   let input2HandlerCheckAmount = () => {
-    if (input2CheckAmount === false) {
-      checkAmountHandler(300);
-    } else {
-      checkAmountHandler(-300);
-    }
 
     window.localStorage.setItem("input2CheckAmount", !input2CheckAmount);
+
+    checkAmountHandler(input1CheckAmount, !input2CheckAmount, input3CheckAmount)
 
     setInput2CheckAmount(!input2CheckAmount);
   };
 
   let input3HandlerCheckAmount = () => {
-    if (input3CheckAmount === false) {
-      checkAmountHandler(200);
-    } else {
-      checkAmountHandler(-200);
-    }
 
     // We set before the local storage of the function of changing it effectively, 
     // as if it is written after will not be runned as the app will be re-rendered firstly
     window.localStorage.setItem("input3CheckAmount", !input3CheckAmount);
+
+    // And now we run the function for computing the check amount before the whole app is re-render with usestate
+    checkAmountHandler(input1CheckAmount, input2CheckAmount, !input3CheckAmount)
 
     setInput3CheckAmount(!input3CheckAmount);
   };
@@ -140,9 +143,29 @@ function Presupost() {
 
   // HANDLING CHANGES IN THE AMOUNT
   // For the amount in of checked
-  let checkAmountHandler = (number) => {
-    setCheckAmount(checkAmount + number);
-  };
+  let checkAmountHandler = (input1Checking, input2Checking, input3Checking) => {
+    // For handling the values when those inputs are active
+    let input1Value = 0;
+    let input2Value = 0
+    let input3Value = 0
+
+    console.log(input1Checking)
+
+    if (input1Checking === true) {
+      input1Value = 500
+    }
+    if (input2Checking === true) {
+      input2Value = 300
+    }
+    if (input3Checking === true) {
+      input3Value = 200
+    }
+    let checkAmountNew = input1Value + input2Value + input3Value
+    console.log(checkAmount)
+
+    setCheckAmount(checkAmountNew)
+  }
+
 
   // For the amount of personalized
   useEffect(() => {

@@ -3,19 +3,11 @@ import styled from "styled-components";
 import plus from "../assets/plus.png";
 import minus from "../assets/minus.png";
 
-
 function Presupost() {
-  // First obtain the values from the local storage
-  let input1 = false
-  let input2 = false
-  let input3 = false
-  let initialPages = 0
-  let initialLanguages = 0
-
   // For handling the changes in checkamount
-  let input1Checking = false
-  let input2Checking = false
-  let input3Checking = false
+  let input1Checking = false;
+  let input2Checking = false;
+  let input3Checking = false;
 
   // For handling all the amounts
   const [bigAmount, setBigAmount] = useState(0);
@@ -31,43 +23,72 @@ function Presupost() {
   const [pages, setPages] = useState(0);
   const [languages, setLanguages] = useState(0);
 
-  // USEEFFECT TO GET VALUES FROM LOCAL STORAGE
+  // HANDLING THE LOCAL STORAGE
+  // We only want to run this for the first time at the start
   useEffect(() => {
-    // As we want to save the fields clicked by the user
-    input1 = window.localStorage.getItem("input1CheckAmount");
-    if (input1 === null) { // In the case there is not input 1
-      input1 = false
+    // First obtain the values from the local storage and assigning them by default to use state
+    let input1 = window.localStorage.getItem("input1CheckAmount");
+    // In the case it is null, means that the app is being rendered for the first time
+    if (input1 === null) {
+      window.localStorage.setItem("input1CheckAmount", false);
+    }
+    // If it is false, we do not have to change nothing
+    // If true, we have to change the initial value
+    if (input1 == "true") {
+      setInput1CheckAmount(true)
+    }
+
+    let input2 = window.localStorage.getItem("input2CheckAmount")
+    if (input2 === null) {
+      window.localStorage.setItem("input2CheckAmount", false)
+    }
+    if (input2 == "true") {
+      setInput2CheckAmount(true)
+    }
+
+    let input3 = window.localStorage.getItem("input3CheckAmount")
+    if (input3 === null){
+      window.localStorage.setItem("input3CheckAmount", false)
+    }
+    if (input3 == "true"){
+      setInput3CheckAmount(true)
+    }
+
+    let pages = window.localStorage.getItem("pages")
+    if (pages === null) {
+      window.localStorage.setItem("pages", 0)
     } 
-    setInput1CheckAmount(input1)
+    setPages(Number(pages))
 
-    input2 = window.localStorage.getItem("input2CheckAmount");
-    if (input2===null) {
-      input2 = false
+    let languages = window.localStorage.getItem("languages")
+    if (languages === null) {
+      window.localStorage.setItem("languages", 0)
     }
-    setInput2CheckAmount(input2)
-
-    input3 = window.localStorage.getItem("input3CheckAmount");
-    if (input3===null) {
-      input3 = false
-    }
-    setInput3CheckAmount(input3)
-
-    initialPages = window.localStorage.getItem("pages");
-    if (initialPages === null) {
-      initialPages = 0
-    }
-    setPages(initialPages)
-
-    initialLanguages = window.localStorage.getItem("languages");
-    if (initialLanguages === null) {
-      initialLanguages = 0
-    }
-    setLanguages(initialLanguages)
+    setLanguages(Number(languages))
   }, []);
+  
+  /*Creates infinite loop: if (input1Boolean === true) {
+    setInput1CheckAmount(input1Boolean)
+  }*/
+  // If it is false, we do not change the initial state (as the value is the same)
+  // If it is true, we change the initial state
+
+  let input2 = window.localStorage.getItem("input2CheckAmount");
+  let input3 = window.localStorage.getItem("input3CheckAmount");
+  let initialPages = window.localStorage.getItem("pages");
+  if (initialPages === null) {
+    initialPages = 0;
+  }
+
+  let initialLanguages = window.localStorage.getItem("languages");
+  if (initialPages === null) {
+    initialLanguages = 0;
+  }
 
   // HANDLING THE CHECK INPUTS
   let input1HandlerCheckAmount = () => {
-    if (input1CheckAmount === true) { // Meaning that the button was active, and then it was clicked
+    if (input1CheckAmount === true) {
+      // Meaning that the button was active, and then it was clicked
 
       // And also when turning off, reset the value of pages and languages
       setPages(0);
@@ -75,41 +96,34 @@ function Presupost() {
 
       setLanguages(0);
       window.localStorage.setItem("languages", 0);
-
     }
-    window.localStorage.setItem("input1CheckAmount", !input1CheckAmount);
-
-    checkAmountHandler(!input1CheckAmount, input2CheckAmount, input3CheckAmount)
+    window.localStorage.setItem("input1CheckAmount", !input1CheckAmount); // Note that when storing, the value is also in string
 
     setInput1CheckAmount(!input1CheckAmount);
   };
 
   let input2HandlerCheckAmount = () => {
-
     window.localStorage.setItem("input2CheckAmount", !input2CheckAmount);
-
-    checkAmountHandler(input1CheckAmount, !input2CheckAmount, input3CheckAmount)
 
     setInput2CheckAmount(!input2CheckAmount);
   };
 
   let input3HandlerCheckAmount = () => {
-
-    // We set before the local storage of the function of changing it effectively, 
+    // We set before the local storage of the function of changing it effectively,
     // as if it is written after will not be runned as the app will be re-rendered firstly
     window.localStorage.setItem("input3CheckAmount", !input3CheckAmount);
 
     // And now we run the function for computing the check amount before the whole app is re-render with usestate
-    checkAmountHandler(input1CheckAmount, input2CheckAmount, !input3CheckAmount)
 
     setInput3CheckAmount(!input3CheckAmount);
   };
 
   // MANAGING THE PERSONALIZED INPUTS
-  let setPagesHandler = (number) => { // In the case the user writes the input
+  let setPagesHandler = (number) => {
+    // In the case the user writes the input
     // We will pass as a Number the number received, if we do not do that if the user puts 1, it will give you pages+"1"
     // The number that is put, is going to be the number of the pages
-    let value = Number(number)
+    let value = Number(number);
 
     window.localStorage.setItem("pages", value);
 
@@ -118,7 +132,7 @@ function Presupost() {
 
   // This is going to be for handling the incrementing or decrementing
   let differentialPages = (number) => {
-    let value = Number(pages) + number
+    let value = Number(pages) + number;
 
     window.localStorage.setItem("pages", value);
 
@@ -126,7 +140,7 @@ function Presupost() {
   };
 
   let setLanguagesHandler = (number) => {
-    let value = Number(number)
+    let value = Number(number);
 
     localStorage.setItem("languages", value);
 
@@ -134,7 +148,7 @@ function Presupost() {
   };
 
   let differentialLanguages = (number) => {
-    let value = Number(languages) + number
+    let value = Number(languages) + number;
 
     // Setting this number before setLanguages, as if not the app will be re-rendered without running the after code setLanguages
     window.localStorage.setItem("languages", value);
@@ -143,29 +157,27 @@ function Presupost() {
 
   // HANDLING CHANGES IN THE AMOUNT
   // For the amount in of checked
-  let checkAmountHandler = (input1Checking, input2Checking, input3Checking) => {
+  useEffect(() => {
     // For handling the values when those inputs are active
+
     let input1Value = 0;
-    let input2Value = 0
-    let input3Value = 0
+    let input2Value = 0;
+    let input3Value = 0;
 
-    console.log(input1Checking)
-
-    if (input1Checking === true) {
-      input1Value = 500
+    if (input1CheckAmount === true) {
+      input1Value = 500;
     }
-    if (input2Checking === true) {
-      input2Value = 300
+    if (input2CheckAmount === true) {
+      input2Value = 300;
     }
-    if (input3Checking === true) {
-      input3Value = 200
+    if (input3CheckAmount === true) {
+      input3Value = 200;
     }
-    let checkAmountNew = input1Value + input2Value + input3Value
-    console.log(checkAmount)
+    let checkAmountNew = input1Value + input2Value + input3Value;
+    console.log(checkAmount);
 
-    setCheckAmount(checkAmountNew)
-  }
-
+    setCheckAmount(checkAmountNew);
+  }, [input1CheckAmount, input2CheckAmount, input3CheckAmount]);
 
   // For the amount of personalized
   useEffect(() => {

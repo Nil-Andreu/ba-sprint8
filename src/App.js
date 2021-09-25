@@ -1,8 +1,19 @@
 import "./App.css";
-import Presupost from "./components/Presupost.jsx";
+import Pressupost from "./components/Pressupost.jsx";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route} from "react-router-dom";
 
 function App() {
-  return <Presupost />;
+  return <Switch>
+    <Route to="initial">
+
+    </Route>
+    <Route to="pressupost">
+      <Pressupost />
+    </Route>
+  </Switch>
 }
 
 export default App;

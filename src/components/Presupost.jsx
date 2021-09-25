@@ -66,24 +66,6 @@ function Presupost() {
     }
     setLanguages(Number(languages))
   }, []);
-  
-  /*Creates infinite loop: if (input1Boolean === true) {
-    setInput1CheckAmount(input1Boolean)
-  }*/
-  // If it is false, we do not change the initial state (as the value is the same)
-  // If it is true, we change the initial state
-
-  let input2 = window.localStorage.getItem("input2CheckAmount");
-  let input3 = window.localStorage.getItem("input3CheckAmount");
-  let initialPages = window.localStorage.getItem("pages");
-  if (initialPages === null) {
-    initialPages = 0;
-  }
-
-  let initialLanguages = window.localStorage.getItem("languages");
-  if (initialPages === null) {
-    initialLanguages = 0;
-  }
 
   // HANDLING THE CHECK INPUTS
   let input1HandlerCheckAmount = () => {
@@ -92,7 +74,7 @@ function Presupost() {
 
       // And also when turning off, reset the value of pages and languages
       setPages(0);
-      window.localStorage.setItem("pages", 0);
+      window.localStorage.setItem("pages", 0); // Store this new amount of pages in the local Storage
 
       setLanguages(0);
       window.localStorage.setItem("languages", 0);

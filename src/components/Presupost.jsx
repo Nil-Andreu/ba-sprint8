@@ -6,17 +6,11 @@ import minus from "../assets/minus.png";
 
 function Presupost() {
   // First obtain the values from the local storage
-  useEffect(() => {
-    // As we want to save the fields clicked by the user
-    let input1 = window.localStorage.getItem("input1CheckAmount");
-    window.localStorage.getItem("input2CheckAmount");
-    window.localStorage.getItem("input3CheckAmount");
-
-    window.localStorage.getItem("pages");
-    window.localStorage.getItem("languages");
-
-    console.log("Hello world", input1);
-  }, []);
+  let input1 = false
+  let input2 = false
+  let input3 = false
+  let initialPages = 0
+  let initialLanguages = 0
 
   // For handling all the amounts
   const [bigAmount, setBigAmount] = useState(0);
@@ -32,7 +26,39 @@ function Presupost() {
   const [pages, setPages] = useState(0);
   const [languages, setLanguages] = useState(0);
 
-  // Anonymous function for getting the values from the localstorage
+  // USEEFFECT TO GET VALUES FROM LOCAL STORAGE
+  useEffect(() => {
+    // As we want to save the fields clicked by the user
+    input1 = window.localStorage.getItem("input1CheckAmount");
+    if (input1 === null) { // In the case there is not input 1
+      input1 = false
+    } 
+    setInput1CheckAmount(input1)
+
+    input2 = window.localStorage.getItem("input2CheckAmount");
+    if (input2===null) {
+      input2 = false
+    }
+    setInput2CheckAmount(input2)
+
+    input3 = window.localStorage.getItem("input3CheckAmount");
+    if (input3===null) {
+      input3 = false
+    }
+    setInput3CheckAmount(input3)
+
+    initialPages = window.localStorage.getItem("pages");
+    if (initialPages === null) {
+      initialPages = 0
+    }
+    setPages(initialPages)
+
+    initialLanguages = window.localStorage.getItem("languages");
+    if (initialLanguages === null) {
+      initialLanguages = 0
+    }
+    setLanguages(initialLanguages)
+  }, []);
 
   // HANDLING THE CHECK INPUTS
   let input1HandlerCheckAmount = () => {
@@ -45,8 +71,7 @@ function Presupost() {
       setPages(0);
       setLanguages(0);
     }
-
-    window.localStorage.setItem("input1CheckAmount", input1CheckAmount);
+    window.localStorage.setItem("input1CheckAmount", !input1CheckAmount);
 
     setInput1CheckAmount(!input1CheckAmount);
   };
@@ -58,7 +83,7 @@ function Presupost() {
       checkAmountHandler(-300);
     }
 
-    window.localStorage.setItem("input2CheckAmount", input2CheckAmount);
+    window.localStorage.setItem("input2CheckAmount", !input2CheckAmount);
 
     setInput2CheckAmount(!input2CheckAmount);
   };
@@ -70,33 +95,47 @@ function Presupost() {
       checkAmountHandler(-200);
     }
 
-    window.localStorage.setItem("input3CheckAmount", input3CheckAmount);
+    // We set before the local storage of the function of changing it effectively, 
+    // as if it is written after will not be runned as the app will be re-rendered firstly
+    window.localStorage.setItem("input3CheckAmount", !input3CheckAmount);
 
     setInput3CheckAmount(!input3CheckAmount);
   };
 
   // MANAGING THE PERSONALIZED INPUTS
-  let setPagesHandler = (number) => {
+  let setPagesHandler = (number) => { // In the case the user writes the input
     // We will pass as a Number the number received, if we do not do that if the user puts 1, it will give you pages+"1"
     // The number that is put, is going to be the number of the pages
-    setPages(Number(number));
-    window.localStorage.setItem("pages", pages);
+    let value = Number(number)
+
+    window.localStorage.setItem("pages", value);
+
+    setPages(value);
   };
 
   // This is going to be for handling the incrementing or decrementing
   let differentialPages = (number) => {
-    setPages(Number(pages) + number);
-    window.localStorage.setItem("pages", pages);
+    let value = Number(pages) + number
+
+    window.localStorage.setItem("pages", value);
+
+    setPages(value);
   };
 
   let setLanguagesHandler = (number) => {
-    setLanguages(Number(number));
-    localStorage.setItem("language", languages);
+    let value = Number(number)
+
+    localStorage.setItem("languages", value);
+
+    setLanguages(value);
   };
 
   let differentialLanguages = (number) => {
-    setLanguages(Number(languages) + number);
-    window.localStorage.setItem("language", languages);
+    let value = Number(languages) + number
+
+    // Setting this number before setLanguages, as if not the app will be re-rendered without running the after code setLanguages
+    window.localStorage.setItem("languages", value);
+    setLanguages(value);
   };
 
   // HANDLING CHANGES IN THE AMOUNT

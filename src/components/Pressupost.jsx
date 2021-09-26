@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import plus from "../assets/plus.png";
 import minus from "../assets/minus.png";
-import Information from "../components/Information.jsx"
+import Information from "../components/Information.jsx";
 
 function Pressupost() {
   // For handling all the amounts
@@ -20,8 +20,8 @@ function Pressupost() {
   const [languages, setLanguages] = useState(0);
 
   // For appearing or not the information layer
-  const [information1, setInformation1] = useState(false)
-  const [information2, setInformation2] = useState(false)
+  const [information1, setInformation1] = useState(false);
+  const [information2, setInformation2] = useState(false);
 
   // HANDLING THE LOCAL STORAGE
   // We only want to run this for the first time at the start
@@ -174,14 +174,12 @@ function Pressupost() {
 
   // FOR HANDLING INFORMATION 1
   let information1Handler = () => {
-
-    setInformation1(!information1)
-  }
+    setInformation1(!information1);
+  };
 
   let information2Handler = () => {
-
-    setInformation2(!information2)
-  }
+    setInformation2(!information2);
+  };
 
   return (
     <Container>
@@ -217,8 +215,11 @@ function Pressupost() {
                     differentialPages(-1);
                   }}
                 />
-                <Information informationHandler={information1Handler} information={information1}
-                  text="En este componente debes indicar el número de páginas que deseas"/>
+                <Information
+                  informationHandler={information1Handler}
+                  information={information1}
+                  text="En este componente debes indicar el número de páginas que deseas"
+                />
               </MiniContainer>
             </ElementPages>
             <ElementPages>
@@ -239,15 +240,18 @@ function Pressupost() {
                     differentialLanguages(-1);
                   }}
                 />
-<Information informationHandler={information2Handler} information={information2}
-                  text="En este componente debes indicar el número de idiomas que deseas"/>
+                <Information
+                  informationHandler={information2Handler}
+                  information={information2}
+                  text="En este componente debes indicar el número de idiomas que deseas"
+                />
               </MiniContainer>
             </ElementPages>
           </DashboardPages>
         ) : (
           ""
         )}
-        <Element inputvalue="500">
+        <Element>
           <label>
             <input
               type="checkbox"
@@ -257,7 +261,7 @@ function Pressupost() {
             Consultoria en SEO $300
           </label>
         </Element>
-        <Element inputvalue="500">
+        <Element>
           <label>
             <input
               type="checkbox"

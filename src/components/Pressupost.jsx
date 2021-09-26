@@ -4,11 +4,6 @@ import plus from "../assets/plus.png";
 import minus from "../assets/minus.png";
 
 function Pressupost() {
-  // For handling the changes in checkamount
-  let input1Checking = false;
-  let input2Checking = false;
-  let input3Checking = false;
-
   // For handling all the amounts
   const [bigAmount, setBigAmount] = useState(0);
   const [checkAmount, setCheckAmount] = useState(0);

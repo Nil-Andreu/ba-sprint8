@@ -273,6 +273,7 @@ function Pressupost() {
         </Element>
         <Quantity>{bigAmount} $</Quantity>
       </Dashboard>
+      <PressupostPanel></PressupostPanel>
     </Container>
   );
 }
@@ -353,3 +354,12 @@ const Input = styled.input`
 `;
 
 const Quantity = styled.p``;
+
+const PressupostPanel = styled.div`
+  position: fixed;
+  width: 20vw;
+  border-left: 1px solid black;
+  top: 0;
+  right: 0;
+  bottom: 0;
+`;

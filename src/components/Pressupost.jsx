@@ -25,11 +25,11 @@ function Pressupost() {
     let input1 = window.localStorage.getItem("input1CheckAmount");
     // In the case it is null, means that the app is being rendered for the first time
     if (input1 === null) {
-      window.localStorage.setItem("input1CheckAmount", false);
+      window.localStorage.setItem("input1CheckAmount", false); // So we create the space in the local storage
     }
     // If it is false, we do not have to change nothing
     // If true, we have to change the initial value
-    if (input1 == "true") {
+    if (input1 === "true") {
       setInput1CheckAmount(true);
     }
 
@@ -37,7 +37,7 @@ function Pressupost() {
     if (input2 === null) {
       window.localStorage.setItem("input2CheckAmount", false);
     }
-    if (input2 == "true") {
+    if (input2 === "true") {
       setInput2CheckAmount(true);
     }
 
@@ -45,7 +45,7 @@ function Pressupost() {
     if (input3 === null) {
       window.localStorage.setItem("input3CheckAmount", false);
     }
-    if (input3 == "true") {
+    if (input3 === "true") {
       setInput3CheckAmount(true);
     }
 
@@ -53,14 +53,14 @@ function Pressupost() {
     if (pages === null) {
       window.localStorage.setItem("pages", 0);
     }
-    setPages(Number(pages));
+    setPages(Number(pages)); // Convert to number, as it is obtained as a string
 
     let languages = window.localStorage.getItem("languages");
     if (languages === null) {
       window.localStorage.setItem("languages", 0);
     }
     setLanguages(Number(languages));
-  }, []);
+  }, []); // No dependencies, as will be rendered for the first time
 
   // HANDLING THE CHECK INPUTS
   let input1HandlerCheckAmount = () => {

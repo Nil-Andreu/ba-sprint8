@@ -23,50 +23,6 @@ function Pressupost() {
   const [information1, setInformation1] = useState(false);
   const [information2, setInformation2] = useState(false);
 
-  // HANDLING THE LOCAL STORAGE
-  // We only want to run this for the first time at the start
-  useEffect(() => {
-    // First obtain the values from the local storage and assigning them by default to use state
-    let input1 = window.localStorage.getItem("input1CheckAmount");
-    // In the case it is null, means that the app is being rendered for the first time
-    if (input1 === null) {
-      window.localStorage.setItem("input1CheckAmount", false); // So we create the space in the local storage
-    }
-    // If it is false, we do not have to change nothing
-    // If true, we have to change the initial value
-    if (input1 === "true") {
-      setInput1CheckAmount(true);
-    }
-
-    let input2 = window.localStorage.getItem("input2CheckAmount");
-    if (input2 === null) {
-      window.localStorage.setItem("input2CheckAmount", false);
-    }
-    if (input2 === "true") {
-      setInput2CheckAmount(true);
-    }
-
-    let input3 = window.localStorage.getItem("input3CheckAmount");
-    if (input3 === null) {
-      window.localStorage.setItem("input3CheckAmount", false);
-    }
-    if (input3 === "true") {
-      setInput3CheckAmount(true);
-    }
-
-    let pages = window.localStorage.getItem("pages");
-    if (pages === null) {
-      window.localStorage.setItem("pages", 0);
-    }
-    setPages(Number(pages)); // Convert to number, as it is obtained as a string
-
-    let languages = window.localStorage.getItem("languages");
-    if (languages === null) {
-      window.localStorage.setItem("languages", 0);
-    }
-    setLanguages(Number(languages));
-  }, []); // No dependencies, as will be rendered for the first time
-
   // HANDLING THE CHECK INPUTS
   let input1HandlerCheckAmount = () => {
     if (input1CheckAmount === true) {
@@ -181,6 +137,131 @@ function Pressupost() {
     setInformation2(!information2);
   };
 
+  // FOR HANDLING SAVING THE PRESSUPOST
+  // Create the array where will have all the pressupostos
+  const [pressupostArray, setPressupostArray] = useState([]);
+
+  // For handling the name of user and pressupost
+  const [namePressupost, setNamePressupost] = useState("");
+  const [nameUser, setNameUser] = useState("");
+
+  // For handling those values
+  let namePressupostHandler = (value) => {
+    console.log(namePressupost);
+    setNamePressupost(value);
+  };
+  let nameUserHandler = (value) => {
+    setNameUser(value);
+  };
+
+  // Create the constructor
+  function Donat(
+    namePressupostValue,
+    nameUserValue,
+    input1,
+    pageQuantity,
+    languageQuantity,
+    input2,
+    input3,
+    totalQuantity,
+    dateNow
+  ) {
+    // assigning  parameter values to the calling object
+    this.namePressupostValue = namePressupostValue;
+    this.nameUserValue = nameUserValue;
+    this.input1 = input1;
+    this.pageQuantity = pageQuantity;
+    this.languageQuantity = languageQuantity;
+    this.input2 = input2;
+    this.input3 = input3;
+    this.totalQuantity = totalQuantity;
+    this.Date = dateNow; // For saving the date
+  }
+
+  let saveHandler = (
+    namePressupost,
+    nameClient,
+    input1,
+    pageQuantity,
+    languageQuantity,
+    input2,
+    input3,
+    totalQuantity
+  ) => {
+    // Create the date
+    let dateNow = new Date().toLocaleDateString();
+    let pressupost = new Donat(
+      namePressupost,
+      nameClient,
+      input1,
+      pageQuantity,
+      languageQuantity,
+      input2,
+      input3,
+      totalQuantity,
+      dateNow
+    );
+
+    window.localStorage.setItem("pressupostArray", JSON.stringify([...pressupostArray, pressupost]))
+
+    // The new value of pressupost Array will be spreading the last one, plus the new pressupost we created
+    setPressupostArray([...pressupostArray, pressupost]);
+
+    // I am not restarting the values as the user might be interested in saving similar ones
+  };
+
+  // HANDLING THE LOCAL STORAGE
+  // We only want to run this for the first time at the start
+  useEffect(() => {
+    // First obtain the values from the local storage and assigning them by default to use state
+    let input1 = window.localStorage.getItem("input1CheckAmount");
+    // In the case it is null, means that the app is being rendered for the first time
+    if (input1 === null) {
+      window.localStorage.setItem("input1CheckAmount", false); // So we create the space in the local storage
+    }
+    // If it is false, we do not have to change nothing
+    // If true, we have to change the initial value
+    if (input1 === "true") {
+      setInput1CheckAmount(true);
+    }
+
+    let input2 = window.localStorage.getItem("input2CheckAmount");
+    if (input2 === null) {
+      window.localStorage.setItem("input2CheckAmount", false);
+    }
+    if (input2 === "true") {
+      setInput2CheckAmount(true);
+    }
+
+    let input3 = window.localStorage.getItem("input3CheckAmount");
+    if (input3 === null) {
+      window.localStorage.setItem("input3CheckAmount", false);
+    }
+    if (input3 === "true") {
+      setInput3CheckAmount(true);
+    }
+
+    let pages = window.localStorage.getItem("pages");
+    if (pages === null) {
+      window.localStorage.setItem("pages", 0);
+    } else {
+    setPages(Number(pages)); // Convert to number, as it is obtained as a string
+    }
+
+    let languages = window.localStorage.getItem("languages");
+    if (languages === null) {
+      window.localStorage.setItem("languages", 0);
+    } else {
+    setLanguages(Number(languages));}
+
+    let pressupostos = window.localStorage.getItem("pressupostArray")    
+    if (pressupostos === null) {
+      window.localStorage.setItem("pressupostArray", [])
+    } else {
+      setPressupostArray([...JSON.parse(pressupostos)]) // We put all the values obtained from the JSON sparse of pressupost (as remember that in local storage is in string)
+    }
+  }, []); // No dependencies, as will be rendered for the first time
+
   return (
     <Container>
       <Dashboard>
@@ -268,12 +349,78 @@ function Pressupost() {
               checked={input3CheckAmount}
               onClick={input3HandlerCheckAmount}
             />
-            Consultoria en SEO $200
+            Campanya Google Ads $200
           </label>
         </Element>
         <Quantity>{bigAmount} $</Quantity>
       </Dashboard>
-      <PressupostPanel></PressupostPanel>
+      <PressupostPanel>
+        <PressupostSaver>
+          <PressupostSaverContainer>
+            <label>Nom Pressupost:</label>
+            <InputSaver
+              type="text"
+              onChange={(event) => {
+                namePressupostHandler(event.target.value);
+              }}
+            />
+          </PressupostSaverContainer>
+          <PressupostSaverContainer>
+            <label>Nom Usuari:</label>
+            <InputSaver
+              type="text"
+              onChange={(event) => {
+                nameUserHandler(event.target.value);
+              }}
+            />
+          </PressupostSaverContainer>
+
+          <ButtonSave
+            onClick={() => {
+              saveHandler(
+                namePressupost,
+                nameUser,
+                input1CheckAmount,
+                pages,
+                languages,
+                input2CheckAmount,
+                input3CheckAmount,
+                bigAmount
+              );
+            }}
+          >
+            Guardar aquest pressupost
+          </ButtonSave>
+        </PressupostSaver>
+        {pressupostArray.map((i) => {
+          return (
+            <Box key={i.totalQuantity}>
+              <h4>Pressupost: {i.namePressupostValue}</h4>
+              <h5>Usuari: {i.nameUserValue}</h5>
+              {i.input1 === true ? (
+                <p>
+                  La opció per fer la pàgina està marcada, amb {i.pageQuantity}{" "}
+                  pàgines i {i.languageQuantity} idiomes
+                </p>
+              ) : (
+                <p>No està marcat per fer una pàgina</p>
+              )}
+              {i.input2 === true ? (
+                <p>La opció per una consultoria SEO està marcada</p>
+              ) : (
+                <p>No està marcat per fer una consultoria SEO</p>
+              )}
+              {i.input3 === true ? (
+                <p>La opció per una campanya de Google Ads està marcada</p>
+              ) : (
+                <p>No està marcat per fer una campanya de Google Ads</p>
+              )}
+              <h5>Quantitat total: {i.totalQuantity}</h5>
+              <p>Creada en: {i.Date}</p>
+            </Box>
+          );
+        })}
+      </PressupostPanel>
     </Container>
   );
 }
@@ -355,6 +502,46 @@ const Input = styled.input`
 
 const Quantity = styled.p``;
 
+const SavePressupost = styled.button`
+  padding: 1rem 4rem;
+  border: 1px solid #5beb5b;
+  border-radius: 5px;
+  text-decoration: none;
+  color: white;
+  background-color: #36e736;
+`;
+
+const PressupostSaver = styled.div`
+  width: 100%;
+  height: 30%;
+  border-bottom: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+const InputSaver = styled.input`
+  height: 2rem;
+  width: 80%;
+  border-radius: 8px;
+`;
+
+const ButtonSave = styled.button`
+  padding: 1rem 4rem;
+  border: 1px solid #5beb5b;
+  border-radius: 5px;
+  text-decoration: none;
+  color: white;
+  background-color: #36e736;
+`;
+
+const PressupostSaverContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+`;
+
 const PressupostPanel = styled.div`
   position: fixed;
   width: 20vw;
@@ -362,4 +549,18 @@ const PressupostPanel = styled.div`
   top: 0;
   right: 0;
   bottom: 0;
+  overflow-y: auto; // So it appears the scroll bar
+`;
+
+const Box = styled.div`
+  margin: 10px auto;
+  width: 80%;
+  height: auto;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 5px;
+  padding: 10px 10px;
 `;

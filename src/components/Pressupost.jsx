@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import plus from "../assets/plus.png";
 import minus from "../assets/minus.png";
+import Information from "../components/Information.jsx"
 
 function Pressupost() {
   // For handling all the amounts
@@ -17,6 +18,10 @@ function Pressupost() {
   // For handling the pages and languages values
   const [pages, setPages] = useState(0);
   const [languages, setLanguages] = useState(0);
+
+  // For appearing or not the information layer
+  const [information1, setInformation1] = useState(false)
+  const [information2, setInformation2] = useState(false)
 
   // HANDLING THE LOCAL STORAGE
   // We only want to run this for the first time at the start
@@ -141,6 +146,7 @@ function Pressupost() {
     let input2Value = 0;
     let input3Value = 0;
 
+    // This code will be run with the new values changed.
     if (input1CheckAmount === true) {
       input1Value = 500;
     }
@@ -151,7 +157,6 @@ function Pressupost() {
       input3Value = 200;
     }
     let checkAmountNew = input1Value + input2Value + input3Value;
-    console.log(checkAmount);
 
     setCheckAmount(checkAmountNew);
   }, [input1CheckAmount, input2CheckAmount, input3CheckAmount]);
@@ -166,6 +171,11 @@ function Pressupost() {
   useEffect(() => {
     setBigAmount(checkAmount + personalizedAmount);
   }, [checkAmount, personalizedAmount]);
+
+  // FOR HANDLING INFORMATION 1
+  let information1Handler = () => {
+    setInformation1(!information1)
+  }
 
   return (
     <Container>
@@ -201,6 +211,8 @@ function Pressupost() {
                     differentialPages(-1);
                   }}
                 />
+                <Information information1Handler={information1Handler} information1={information1}
+                  text="En este componente debes indicar el número de páginas que deseas"/>
               </MiniContainer>
             </ElementPages>
             <ElementPages>
@@ -221,6 +233,8 @@ function Pressupost() {
                     differentialLanguages(-1);
                   }}
                 />
+                <Information text="En este componente debes indicar el número de páginas que deseas"/>
+
               </MiniContainer>
             </ElementPages>
           </DashboardPages>
@@ -276,7 +290,7 @@ const Dashboard = styled.div`
 
 const DashboardPages = styled.div`
   height: 20vh;
-  width: 30vw;
+  width: 35vw;
   border: 0.5px solid black;
   border-radius: 10px;
   display: flex;
@@ -295,6 +309,8 @@ const ElementPages = styled.div`
 
 const MiniContainer = styled.div`
   margin-left: 10px;
+  display: flex;
+  flex-direction: row;
 `;
 
 const Element = styled.div`

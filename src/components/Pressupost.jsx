@@ -174,7 +174,13 @@ function Pressupost() {
 
   // FOR HANDLING INFORMATION 1
   let information1Handler = () => {
+
     setInformation1(!information1)
+  }
+
+  let information2Handler = () => {
+
+    setInformation2(!information2)
   }
 
   return (
@@ -211,7 +217,7 @@ function Pressupost() {
                     differentialPages(-1);
                   }}
                 />
-                <Information information1Handler={information1Handler} information1={information1}
+                <Information informationHandler={information1Handler} information={information1}
                   text="En este componente debes indicar el número de páginas que deseas"/>
               </MiniContainer>
             </ElementPages>
@@ -233,8 +239,8 @@ function Pressupost() {
                     differentialLanguages(-1);
                   }}
                 />
-                <Information text="En este componente debes indicar el número de páginas que deseas"/>
-
+<Information informationHandler={information2Handler} information={information2}
+                  text="En este componente debes indicar el número de idiomas que deseas"/>
               </MiniContainer>
             </ElementPages>
           </DashboardPages>
